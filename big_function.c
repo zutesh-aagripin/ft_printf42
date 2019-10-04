@@ -6,78 +6,83 @@
 /*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:20:13 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/03 18:35:29 by aagripin         ###   ########.fr       */
+/*   Updated: 2019/10/04 22:29:55 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
 
-int		funpart(int fd, char *format, va_list arg, int nbr)
+int		ft_switch(int fd, char *format, va_list arg, int nbr, t_conv_spec cs)
 {
-	int d;
-	int i;
-	char c;
-	char *s;
-
 	switch(*format)
 	{
 		case 's':	
-			s = va_arg(ap, char *);
-			while (*s)
-			{
-				ft_putchar_fd(*s, fd);
-				s++;
-				nbr++;
-			}
+			nbr = string((va_arg(arg, char*)), fd, nbr, cs);
+			break ;
 		case 'c':
-			c = va_arg(ap, int);
-			ft_putchar_fd(c, fd);
-			nbr++;
+			nbr = character((va_arg(arg, int)), fd, nbr);
+			break ;
 		case 'd':
-			d = va_arg(ap, int);
-			ft_putnbr_fd(d, fd);
-			if (d < 0);
-				nbr++;
-			while (d/10)
-				nbr++;
-			nbr++;
-		case 'p'
-			s = va_arg(ap, char *);
-			{
-				ft_putchar_fd(*s, fd);
-				s++;
-				nbr++;
-			}
-		case 'i'
-			i = va_arg(ap, int);
-			ft_putnbr_fd(i, fd);
-			if (i < 0);
-				nbr++;
-			while (i/10)
-				nbr++;
-			nbr++;
+			nbr = number((va_arg(arg, int)), fd, nbr);
+			break ;
+	/*	case 'p':
+			nbr = hex_high((va_arg(arg, int)), fd, nbr);
+			break ; */
+		case 'i':
+			nbr = number((va_arg(arg, int)), fd, nbr);
+			break ;
+	/*	case 'o':
+	 *		nbr = octal((va_arg(arg, int)), fd, nbr);
+	 *		break;
+	 *	case 'x':
+			nbr = hex_low((va_arg(arg, int)), fd, nbr);
+			break ;
+		case 'X':
+			nbr = hex_high((va_arg(arg, int)), fd, nbr);
+			break ;
+		case 'f':
+			nbr = ft_float((va_arg(arg, float)), fd, nbr);
+			break ; */
+	//commented functions not ready yet, but need to be done
 	}
 	return (nbr);
 }		
 
+int		funpart(int fd, char *format, va_list arg, int nbr, int *offset)
+{
+	t_conv_spec cs;
+ 	
+	*offset = parse_format(format, &cs);
+	if (*offset > 1)
+		format = format + *offset - 1;
+	nbr = ft_switch(fd, format, arg, nbr, cs);
+	return (nbr); 
+}
+
 int		big_function(int fd, char *format, va_list arg, int nbr)
 {
+	int offset;
+
 	while (*format)
 	{
 		if (*format != '%')
 		{
 			ft_putchar_fd(*format, fd);
 			nbr++;
+			offset = 1;
 		}
 		else if (*format == '%' && *(format + 1) == '%')
 		{
 			ft_putchar_fd(*format, fd);
-			format++;
+			offset = 2;
 			nbr++;
 		}
 		else if (*format == '%')
-			nbr = funpart(fd, format, arg, nbr);
-		format++;
+		{
+			format++;
+			nbr = funpart(fd, format, arg, nbr, &offset);
+		}
+		format = format + offset;
 	}
 	return (nbr);
 }
