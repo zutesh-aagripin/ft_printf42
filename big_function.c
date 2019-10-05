@@ -6,7 +6,7 @@
 /*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:20:13 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/04 22:29:55 by aagripin         ###   ########.fr       */
+/*   Updated: 2019/10/05 17:12:01 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,23 @@ int		ft_switch(int fd, char *format, va_list arg, int nbr, t_conv_spec cs)
 			nbr = string((va_arg(arg, char*)), fd, nbr, cs);
 			break ;
 		case 'c':
-			nbr = character((va_arg(arg, int)), fd, nbr);
+			nbr = character((va_arg(arg, int)), fd, nbr, cs);
 			break ;
 		case 'd':
-			nbr = number((va_arg(arg, int)), fd, nbr);
+			nbr = number((va_arg(arg, int)), fd, nbr, cs);
 			break ;
-	/*	case 'p':
-			nbr = hex_high((va_arg(arg, int)), fd, nbr);
-			break ; */
+		case 'p':
+			nbr = pointer((va_arg(arg, void *)), fd, nbr, cs);
+			break ; 
 		case 'i':
-			nbr = number((va_arg(arg, int)), fd, nbr);
+			nbr = number((va_arg(arg, int)), fd, nbr, cs);
 			break ;
 	/*	case 'o':
 	 *		nbr = octal((va_arg(arg, int)), fd, nbr);
 	 *		break;
-	 *	case 'x':
-			nbr = hex_low((va_arg(arg, int)), fd, nbr);
-			break ;
+	 */	case 'x':
+			nbr = hex_low((va_arg(arg, unsigned int)), fd, nbr, cs);
+			break ; /*
 		case 'X':
 			nbr = hex_high((va_arg(arg, int)), fd, nbr);
 			break ;

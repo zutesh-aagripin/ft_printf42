@@ -6,7 +6,7 @@
 /*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:15:28 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/04 21:06:09 by aagripin         ###   ########.fr       */
+/*   Updated: 2019/10/05 17:14:14 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ char        type_set;
 
 int				ft_printf(const char *format, ...);
 int				big_function(int fd, char *format, va_list arg, int nbr);
-int				number(int d, int fd, int nbr);
+int				number(int d, int fd, int nbr, t_conv_spec cs);
 int				string(char *s, int fd, int nbr, t_conv_spec cs);
-int				character(int d, int fd, int nbr);
+int				character(int d, int fd, int nbr, t_conv_spec cs);
 int				parse_format(char *format, t_conv_spec *main_cs);
+int				hex_low(unsigned int x, int fd, int nbr, t_conv_spec cs);
+int				pointer(void *x, int fd, int nbr, t_conv_spec cs);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:20:13 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/04 22:29:45 by aagripin         ###   ########.fr       */
+/*   Updated: 2019/10/05 14:02:29 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int		parse_format(char *format, t_conv_spec *cs)
 	cs->width_set = 0;
 	cs->flags_set = 0;
 	cs->flag_minus = 0;
+	cs->flag_zero = 0;
 	f = format;
 	while (*f)
 	{
@@ -116,9 +117,9 @@ int		parse_format(char *format, t_conv_spec *cs)
 		else
 			return (f - format);
 	}
-	ft_putnbr((int)cs->width);
-	ft_putnbr(cs->flag_minus);
-	ft_putnbr(f - format);
-	ft_putchar('\n');
+//	ft_putnbr((int)cs->width);
+//	ft_putnbr(cs->flag_minus);
+//	ft_putnbr(f - format);
+//	ft_putchar('\n');
 	return (f - format);
 }
