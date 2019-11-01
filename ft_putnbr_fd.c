@@ -1,24 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/03 16:07:20 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/11 14:46:03 by aagripin         ###   ########.fr       */
+/*   Created: 2019/09/11 17:54:09 by aagripin          #+#    #+#             */
+/*   Updated: 2019/09/17 17:39:28 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include <unistd.h>
 
-int		ft_printf(const char *format, ...)
+void	ft_putnbr_fd(int nb, int fd)
 {
-	va_list	arg;
-	int		done;
+	char n;
 
-	va_start(arg, format);
-	done = big_function(1, (char*)format, arg, 0);
-	va_end(arg);
-	return (done);
+	if (nb == -2147483648)
+	{
+		nb = 147483648;
+		write(fd, "-", 1);
+		write(fd, "2", 1);
+	}
+	if (nb < 0)
+	{
+		nb = nb * (-1);
+		write(fd, "-", 1);
+	}
+	if (nb / 10)
+		ft_putnbr_fd(nb / 10, fd);
+	n = '0' + nb % 10;
+	write(fd, &n, 1);
 }

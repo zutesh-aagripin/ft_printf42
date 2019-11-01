@@ -6,83 +6,83 @@
 /*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/03 16:20:13 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/05 17:12:01 by aagripin         ###   ########.fr       */
+/*   Updated: 2019/10/16 16:35:17 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libftprintf.h"
+#include "ft_float.h"
 
-int		ft_switch(int fd, char *format, va_list arg, int nbr, t_conv_spec cs)
+void	length(char *format, va_list arg, char **print, t_conv_spec cs)
 {
-	switch(*format)
-	{
-		case 's':	
-			nbr = string((va_arg(arg, char*)), fd, nbr, cs);
-			break ;
-		case 'c':
-			nbr = character((va_arg(arg, int)), fd, nbr, cs);
-			break ;
-		case 'd':
-			nbr = number((va_arg(arg, int)), fd, nbr, cs);
-			break ;
-		case 'p':
-			nbr = pointer((va_arg(arg, void *)), fd, nbr, cs);
-			break ; 
-		case 'i':
-			nbr = number((va_arg(arg, int)), fd, nbr, cs);
-			break ;
-	/*	case 'o':
-	 *		nbr = octal((va_arg(arg, int)), fd, nbr);
-	 *		break;
-	 */	case 'x':
-			nbr = hex_low((va_arg(arg, unsigned int)), fd, nbr, cs);
-			break ; /*
-		case 'X':
-			nbr = hex_high((va_arg(arg, int)), fd, nbr);
-			break ;
-		case 'f':
-			nbr = ft_float((va_arg(arg, float)), fd, nbr);
-			break ; */
-	//commented functions not ready yet, but need to be done
-	}
-	return (nbr);
-}		
-
-int		funpart(int fd, char *format, va_list arg, int nbr, int *offset)
-{
-	t_conv_spec cs;
- 	
-	*offset = parse_format(format, &cs);
-	if (*offset > 1)
-		format = format + *offset - 1;
-	nbr = ft_switch(fd, format, arg, nbr, cs);
-	return (nbr); 
+	if (cs.length == LEN_L)
+		ft_switchl(format, arg, print);
+	else if (cs.length == LEN_LL || cs.length == LEN_BIG_L)
+		ft_switchll(format, arg, print);
+	else if (cs.length == LEN_NONE)
+		ft_switch(format, arg, print);
+	else if (cs.length == LEN_H)
+		ft_switchh(format, arg, print);
+	else if (cs.length == LEN_HH)
+		ft_switchhh(format, arg, print);
 }
 
-int		big_function(int fd, char *format, va_list arg, int nbr)
+int		process_float(va_list arg, t_conv_spec *cs, int nbr)
 {
-	int offset;
+	if (cs->precision_set == 0)
+		cs->precision = 6;
+	if (cs->length == LEN_BIG_L)
+		return (nbr + print_float((va_arg(arg, long double)), cs));
+	else
+		return (nbr + print_float((long double)(va_arg(arg, double)), cs));
+}
 
+int		funpart(int fd, char **format, va_list arg, int nbr)
+{
+	t_conv_spec cs;
+	char		*print;
+
+	print = NULL;
+	set_to_null(&cs);
+	parse_format(format, &cs, arg);
+	if (cs.type == 'f')
+		return (process_float(arg, &cs, nbr));
+	length(*format, arg, &print, cs);
+	if (print == NULL && cs.type != 's')
+		return (nbr);
+	if (print == NULL && cs.type == 's')
+		print = ft_strjoin("", "(null)");
+	precision(&print, cs);
+	if (cs.type != 'c' && cs.type != '%' && cs.type != 'Z')
+		width(&print, cs);
+	if (cs.type == 'c' || cs.type == '%' || cs.type == 'Z')
+		nbr = character(print, fd, nbr, cs);
+	else
+		nbr = putout(print, fd, nbr, cs);
+	free(print);
+	print = NULL;
+	return (nbr);
+}
+
+int		big_function(int fd, char *f, va_list arg, int nbr)
+{
+	char *format;
+
+	format = f;
 	while (*format)
 	{
 		if (*format != '%')
 		{
 			ft_putchar_fd(*format, fd);
 			nbr++;
-			offset = 1;
-		}
-		else if (*format == '%' && *(format + 1) == '%')
-		{
-			ft_putchar_fd(*format, fd);
-			offset = 2;
-			nbr++;
 		}
 		else if (*format == '%')
 		{
 			format++;
-			nbr = funpart(fd, format, arg, nbr, &offset);
+			nbr = funpart(fd, &format, arg, nbr);
 		}
-		format = format + offset;
+		if (*format)
+			format++;
 	}
 	return (nbr);
 }

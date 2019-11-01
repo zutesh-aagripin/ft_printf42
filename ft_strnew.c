@@ -1,24 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_strnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kbryce <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/03 16:07:20 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/11 14:46:03 by aagripin         ###   ########.fr       */
+/*   Created: 2019/09/05 19:50:03 by kbryce            #+#    #+#             */
+/*   Updated: 2019/10/16 17:56:28 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include <stdlib.h>
+#include "ft_float.h"
 
-int		ft_printf(const char *format, ...)
+char	*ft_strnew(size_t size)
 {
-	va_list	arg;
-	int		done;
+	char	*new;
+	char	*n;
 
-	va_start(arg, format);
-	done = big_function(1, (char*)format, arg, 0);
-	va_end(arg);
-	return (done);
+	size++;
+	new = (char *)malloc(size);
+	if (!new)
+		return (NULL);
+	n = new;
+	while (size)
+	{
+		*n = 0;
+		n++;
+		size--;
+	}
+	return (new);
 }

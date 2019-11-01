@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: kbryce <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/03 16:07:20 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/11 14:46:03 by aagripin         ###   ########.fr       */
+/*   Created: 2019/09/05 17:13:18 by kbryce            #+#    #+#             */
+/*   Updated: 2019/10/16 17:56:42 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ft_float.h"
 
-int		ft_printf(const char *format, ...)
+char	*ft_strcat(char *s1, const char *s2)
 {
-	va_list	arg;
-	int		done;
+	char	*res;
 
-	va_start(arg, format);
-	done = big_function(1, (char*)format, arg, 0);
-	va_end(arg);
-	return (done);
+	res = s1;
+	while (*s1)
+		s1++;
+	while (*s2)
+		*s1++ = *s2++;
+	*s1 = '\0';
+	return (res);
 }

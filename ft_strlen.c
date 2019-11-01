@@ -1,24 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/03 16:07:20 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/11 14:46:03 by aagripin         ###   ########.fr       */
+/*   Created: 2019/09/11 11:51:29 by aagripin          #+#    #+#             */
+/*   Updated: 2019/09/19 19:41:53 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include <string.h>
 
-int		ft_printf(const char *format, ...)
+size_t	ft_strlen(const char *str)
 {
-	va_list	arg;
-	int		done;
+	size_t i;
 
-	va_start(arg, format);
-	done = big_function(1, (char*)format, arg, 0);
-	va_end(arg);
-	return (done);
+	i = 0;
+	while (*(str + i) != '\0')
+	{
+		i++;
+	}
+	return (i);
 }

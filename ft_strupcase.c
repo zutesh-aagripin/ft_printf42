@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_strupcase.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aagripin <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/03 16:07:20 by aagripin          #+#    #+#             */
-/*   Updated: 2019/10/11 14:46:03 by aagripin         ###   ########.fr       */
+/*   Created: 2019/06/10 23:18:46 by aagripin          #+#    #+#             */
+/*   Updated: 2019/06/11 17:18:47 by aagripin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
-
-int		ft_printf(const char *format, ...)
+char		*ft_strupcase(char *str)
 {
-	va_list	arg;
-	int		done;
+	int i;
 
-	va_start(arg, format);
-	done = big_function(1, (char*)format, arg, 0);
-	va_end(arg);
-	return (done);
+	i = 0;
+	while (*str != '\0')
+	{
+		if ('a' <= *str && *str <= 'z')
+			*str = *str - 32;
+		str++;
+		i++;
+	}
+	str = str - i;
+	return (str);
 }
